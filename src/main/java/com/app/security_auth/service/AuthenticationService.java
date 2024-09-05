@@ -53,7 +53,8 @@ public class AuthenticationService {
         if (grantType.equals("password")) {
             // Authentifie l'utilisateur avec le nom d'utilisateur et le mot de passe
             Authentication authenticate = authManager
-                    .authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
+                    .authenticate(new UsernamePasswordAuthenticationToken(
+                            user.getUsername(), user.getPassword()));
             // Récupère le nom et les roles
             subject = authenticate.getName();
             scope = authenticate.getAuthorities().stream().map(auth -> auth.getAuthority())
@@ -81,7 +82,7 @@ public class AuthenticationService {
         JwtClaimsSet jwtClaimsSet = JwtClaimsSet.builder()
                 .subject(subject)
                 .issuedAt(instant)
-                .expiresAt(instant.plus(withRefreshToken ? 1 : 5, ChronoUnit.MINUTES))
+                .expiresAt(instant.plus(withRefreshToken ? 5 : 10, ChronoUnit.MINUTES))
                 .issuer("security-auth")
                 .claim("scope", scope)
                 .build();

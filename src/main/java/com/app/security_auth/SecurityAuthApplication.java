@@ -5,7 +5,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.app.security_auth.config.RsaKeysConfig;
@@ -21,13 +20,8 @@ public class SecurityAuthApplication {
 		SpringApplication.run(SecurityAuthApplication.class, args);
 	}
 
-	// @Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
-
 	@Bean
-	CommandLineRunner start(IAccountService accountService) {
+	CommandLineRunner start(IAccountService accountService, PasswordEncoder passwordEncoder) {
 		return args -> {
 			new AppRole();
 			new AppUser();
@@ -36,11 +30,10 @@ public class SecurityAuthApplication {
 
 			accountService
 					.addUser(AppUser.builder().id(null).username("Nasser").password(
-							passwordEncoder().encode("1234")).roles(null)
-							.email("nasser@email.com")
-							.build());
+							passwordEncoder.encode("1234")).roles(null)
+							.email("nasser@email.com").build());
 			accountService
-					.addUser(AppUser.builder().id(null).username("Ahmed").password(passwordEncoder()
+					.addUser(AppUser.builder().id(null).username("Ahmed").password(passwordEncoder
 							.encode("1234")).roles(null).email("ahmed@email.com").build());
 
 			accountService.addRoleToUser("Nasser", "ADMIN");

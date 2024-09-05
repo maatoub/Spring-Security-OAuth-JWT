@@ -2,7 +2,8 @@ package com.app.security_auth.service.impl;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,16 +17,27 @@ import com.app.security_auth.service.intr.IAccountService;
 @Transactional
 public class AccountServiceImpl implements IAccountService {
 
-    @Autowired
     private AppRoleRepository roleRepository;
 
-    @Autowired
     private AppUserRepository userRepository;
+
+    private PasswordEncoder passwordEncoder;
+
+    public AccountServiceImpl(AppRoleRepository roleRepository, AppUserRepository userRepository,
+            @Lazy PasswordEncoder passwordEncoder) {
+        this.roleRepository = roleRepository;
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     public AppUser addUser(AppUser user) {
         if (user == null) {
             throw new IllegalArgumentException("User must not be null");
+        }
+        if (!user.getPassword().startsWith("$2a$")) {
+            String encodedPassword = passwordEncoder.encode(user.getPassword());
+            user.setPassword(encodedPassword);
         }
         return userRepository.save(user);
     }
