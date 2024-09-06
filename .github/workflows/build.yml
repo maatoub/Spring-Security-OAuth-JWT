@@ -38,6 +38,6 @@ jobs:
       - name: Build and push Docker image to Docker Hub
         uses: docker/build-push-action@v5
         with:
-          context: . # Adjust to the path where your Dockerfile is located
+          context: . 
           push: true
-          tags: nasser86/security-auth-jwt # Change this to your actual Docker Hub repo and image name
+          tags: nasser86/security-auth-jwt 

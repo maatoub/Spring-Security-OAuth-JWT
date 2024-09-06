@@ -39,7 +39,7 @@ public class AuthController {
     }
 
     /* ******************************* */
-    @PostMapping("/token")
+    @PostMapping("/login")
     public ResponseEntity<Map<String, String>> jwtToken(
             @RequestBody AppUser user,
             @RequestParam String grantType,
