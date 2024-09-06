@@ -38,6 +38,6 @@ jobs:
       - name: Build and push Docker image to Docker Hub
         uses: docker/build-push-action@v5
         with:
-          context: . 
+          context: .
           push: true
-          tags: nasser86/security-auth-jwt 
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/security-auth-jwt:build-${{ github.run_number }}
